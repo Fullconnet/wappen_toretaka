@@ -10,7 +10,7 @@ org = st.selectbox("団体を選んでください", ["JKJO", "リアルチャ�
 if org == "JKJO":
     df = pd.read_csv("jkjo_list.csv")
 elif org == "リアルチャンピオンシップ":
-    df = pd.read_excel("real_2025kenri26.xlsx")
+    df = pd.read_csv("real_2025kenri26.csv")
 
 # 検索条件：名前（部分一致）
 name = st.text_input("選手名で検索（部分一致）")
