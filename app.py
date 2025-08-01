@@ -52,6 +52,15 @@ if selected_grade != "すべて":
 if selected_gender != "すべて":
     df = df[df["性別"] == selected_gender]
 
+# 道場検索
+dojo = st.text_input("道場名で検索（部分一致）")
+dojo = clean_name(dojo)
+
+# フィルタリング：道場
+if dojo:
+    df = df[df["所属道場"].astype(str).map(clean_name).str.contains(dojo, case=False, na=False)]
+
+
 # 結果表示
 st.subheader("検索結果")
 st.write(f"{len(df)} 件ヒット")
