@@ -35,9 +35,12 @@ df["名前"] = df["名前"].astype(str)\
     .map(lambda x: unicodedata.normalize("NFKC", x))\
     .str.replace("　", "", regex=False).str.strip()
 
+# ユーザー入力の正規化
+name = unicodedata.normalize("NFKC", name).strip()
+
 # フィルタリング
 if name:
-    df = df[df["名前"].astype(str).str.contains(name)]
+    df = df[df["名前"].str.contains(name, case=False, na=False)]
 
 if selected_grade != "すべて":
     df = df[df["学年"] == selected_grade]
