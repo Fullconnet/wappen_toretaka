@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import unicodedata
 
 st.title("代表選手 検索システム")
 
@@ -28,6 +29,11 @@ else:
 # 検索条件：性別
 genders = df["性別"].dropna().unique().tolist() if "性別" in df.columns else []
 selected_gender = st.selectbox("性別を選択", ["すべて"] + genders)
+
+# 名前列の正規化＋スペース除去
+df["名前"] = df["名前"].astype(str)\
+    .map(lambda x: unicodedata.normalize("NFKC", x))\
+    .str.replace("　", "", regex=False).str.strip()
 
 # フィルタリング
 if name:
