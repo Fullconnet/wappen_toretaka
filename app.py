@@ -28,7 +28,7 @@ selected_gender = st.selectbox("性別を選択", ["すべて"] + genders)
 
 # フィルタリング
 if name:
-    df = df[df["氏名"].astype(str).str.contains(name)]
+    df = df[df["名前"].astype(str).str.contains(name)]
 
 if selected_grade != "すべて":
     df = df[df["学年"] == selected_grade]
