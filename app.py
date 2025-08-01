@@ -12,6 +12,9 @@ if org == "JKJO":
 elif org == "リアルチャンピオンシップ":
     df = pd.read_csv("real_2025kenri.csv")
 
+# 👇 名前列の全角スペース削除＋前後の空白除去
+df["名前"] = df["名前"].astype(str).str.replace("　", "").str.strip()
+
 # 検索条件：名前（部分一致）
 name = st.text_input("選手名で検索（部分一致）")
 
