@@ -4,6 +4,17 @@ import unicodedata
 
 st.title("代表選手 検索システム")
 
+# 異体字などを正規化＋置換する関数
+def clean_name(text):
+    if pd.isna(text):
+        return ""
+    return unicodedata.normalize("NFKC", str(text))\
+        .replace("﨑", "崎")\
+        .replace("髙", "高")\
+        .replace("齋", "斉")\
+        .replace("　", "")\
+        .strip()
+
 # 団体を選択
 org = st.selectbox("団体を選んでください", ["JKJO", "リアルチャンピオンシップ"])
 
@@ -13,13 +24,14 @@ if org == "JKJO":
 elif org == "リアルチャンピオンシップ":
     df = pd.read_csv("real_2025kenri.csv")
 
-# 👇 名前列の全角スペース削除＋前後の空白除去
-df["名前"] = df["名前"].astype(str).str.replace("　", "").str.strip()
+# 名前列をクリーン化
+df["名前"] = df["名前"].map(clean_name)
 
 # 検索条件：名前（部分一致）
 name = st.text_input("選手名で検索（部分一致）")
+name = clean_name(name)  # ユーザー入力もクリーン化
 
-# 検索条件：学年（ユニーク値から選択）
+# 検索条件：学年
 if "学年" in df.columns:
     grades = df["学年"].dropna().unique().tolist()
     selected_grade = st.selectbox("学年を選択", ["すべて"] + sorted(grades))
@@ -29,14 +41,6 @@ else:
 # 検索条件：性別
 genders = df["性別"].dropna().unique().tolist() if "性別" in df.columns else []
 selected_gender = st.selectbox("性別を選択", ["すべて"] + genders)
-
-# 名前列の正規化＋スペース除去
-df["名前"] = df["名前"].astype(str)\
-    .map(lambda x: unicodedata.normalize("NFKC", x))\
-    .str.replace("　", "", regex=False).str.strip()
-
-# ユーザー入力の正規化
-name = unicodedata.normalize("NFKC", name).strip()
 
 # フィルタリング
 if name:
