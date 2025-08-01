@@ -60,6 +60,14 @@ dojo = clean_name(dojo)
 if dojo:
     df = df[df["所属道場"].astype(str).map(clean_name).str.contains(dojo, case=False, na=False)]
 
+# UI
+tournaments = df["獲得大会"].dropna().unique().tolist()
+selected_tournament = st.selectbox("獲得大会を選択", ["すべて"] + sorted(tournaments))
+
+# 絞り込み
+if selected_tournament != "すべて":
+    df = df[df["獲得大会"] == selected_tournament]
+
 
 # 結果表示
 st.subheader("検索結果")
