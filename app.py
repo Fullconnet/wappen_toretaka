@@ -27,6 +27,10 @@ elif org == "リアルチャンピオンシップ":
 # 名前列をクリーン化
 df["名前"] = df["名前"].map(clean_name)
 
+# 列名が「階級（学年）」の場合に「学年」に統一
+if "階級（学年）" in df.columns and "学年" not in df.columns:
+    df["学年"] = df["階級（学年）"]
+
 # 検索条件：名前（部分一致）
 name = st.text_input("選手名で検索（部分一致）")
 name = clean_name(name)  # ユーザー入力もクリーン化
