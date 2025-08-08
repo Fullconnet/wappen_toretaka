@@ -16,13 +16,15 @@ def clean_name(text):
         .strip()
 
 # 団体を選択
-org = st.selectbox("団体を選んでください", ["JKJO", "リアルチャンピオンシップ"])
+org = st.selectbox("団体を選んでください", ["JKJO", "リアルチャンピオンシップ", "ジュニアチャンピオンシップ"])
 
 # ファイル読み込み
 if org == "JKJO":
     df = pd.read_csv("jkjo_list_0807.csv")
 elif org == "リアルチャンピオンシップ":
     df = pd.read_csv("real_2025kenri.csv")
+elif org == "ジュニアチャンピオンシップ":
+    df = pd.read_csv("junior_champ_kenri_0808.csv") 
 
 # 名前列をクリーン化
 df["名前"] = df["名前"].map(clean_name)
